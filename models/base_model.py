@@ -23,10 +23,12 @@ class BaseModel:
                     self.__dict__[key] = datetime.strptime(value, time)
                 else:
                     self.__dict__[key] = value
+
     def __str__(self):
         """print/str representation of BaseModel instance"""
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
-    
+        return "[{}] ({}) {}".\
+            format(type(self).__name__, self.id, self.__dict__)
+
     def save(self):
         """Updates updated_at with current time"""
         self.updated_at = datetime.now()
