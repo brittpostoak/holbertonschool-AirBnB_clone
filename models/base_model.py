@@ -2,6 +2,7 @@
 """Defines the BaseModel class"""
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel:
@@ -17,6 +18,8 @@ class BaseModel:
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         time = "%Y-%m-%dT%H:%M:%S.%f"
+        storage.new(self)
+
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
@@ -32,6 +35,7 @@ class BaseModel:
     def save(self):
         """Updates updated_at with current time"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """returns dictionary key/value list of __dict__"""
