@@ -2,11 +2,11 @@
 """Defines FileStorage class"""
 import datetime
 import json
-import os
+from models.base_model import BaseModel
 
 
 class FileStorage:
-    """Class that stores and retrieves data"""
+    """ serialize inst to a JSON file and deserialize JSON file to inst"""
     __file_path = "file.json"
     __objects = {}
 
@@ -21,13 +21,13 @@ class FileStorage:
 
     def save(self):
         """serializes __objects ti json file"""
-        opendict = FileStorage.__objects
-        objdict = {obj: opendict[obj].to_dict() for obj in opendict.keys()}
+        obdict = FileStorage.__objects
+        objdict = {obj: obdict[obj].to_dict() for obj in obdict.keys()}
         with open(FileStorage.__file_path, "w") as f:
             json.dump(objdict, f)
 
     def reload(self):
-        """deserialize json file to __objects
+        """deserialize json file to __objects if it exists
         Raise exception: none
         """
         try:
