@@ -23,5 +23,6 @@ class HBNBCommand(cmd.Cmd):
         """doesnt execute anything"""
         pass
 
+
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
