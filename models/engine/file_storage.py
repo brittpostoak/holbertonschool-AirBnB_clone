@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """Defines FileStorage class"""
-import datetime
 import json
 from models.base_model import BaseModel
-import os
+
 
 class FileStorage:
     """Represents storage engine"""
@@ -17,23 +16,26 @@ class FileStorage:
 
     def new(self, obj):
         """sets in __objects the obj with key<obj class name>.id """
-        objname = obj.__class__.__name__
-        FileStorage.__objects["{}.{}".format(objname, obj.id)] = obj
+        objname = f"{obj.__class__.__name__}.{obj.id"}
+        FileStorage.__objects[objname] = obj
 
     def save(self):
         """serializes __objects ti json file"""
+        objdict = FileStorage.__objects
+        f_objdict = {obj: objdict[obj]. to_dict() for obj in objdict.keys()}
         with open(FileStorage.__file_path, "w") as f:
-            data = {key: value.to_dict() for key, value in FileStorage.__objects.items()}
-            json.dump(data, f)
+            json.dump(f_objdict, f)
 
     def reload(self):
         """deserialize json file to __objects if it exists
         Raise exception: none
         """
-        if not os.path.isfile(FileStorage.__file_path):
+        try:
+            with open(FileStorage.__file_path) as f:
+                objdict = json.load(f)
+                for val in objdict.values():
+                    cls_name = val["__class__"]
+                    del val["__class__"]
+                    self.new(eval(cls_name)(**val))
+        except FileNotFoundError:
             return
-        with open(FileStorage.__file_path, "r") as f:
-            objdict = json.load(f)
-            objdict = {key: self.classes()[v["__class__"]](**value)
-                    for key, value in objdict.items()}
-            FileStorage.__objects = objdict
