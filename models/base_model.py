@@ -32,16 +32,16 @@ class BaseModel:
 	    cls_name = type(self).__name__
 	    str_rep = "[{}] ({}) {}".format(cls_name, self.id, self.__dict__)
 	    return (str_rep)
+	    
+    def save(self):
+	    """Updates updated_at with current time"""
+	    self.updated_at = datetime.now()
+	    storage.save()
 
-	def save(self):
-        """Updates updated_at with current time"""
-        self.updated_at = datetime.now()
-        storage.save()
-
-	def to_dict(self):
-        """returns dictionary key/value list of __dict__"""
-        dict_rep = {}
-        time_format = datetime.isoformat
+    def to_dict(self):
+	    """returns dictionary key/value list of __dict__"""
+	    dict_rep = {}
+	    time_format = datetime.isoformat
         for key in self.__dict__:
             value = self.__dict__[key]
             if key == "created_at" or key == "updated_at":
