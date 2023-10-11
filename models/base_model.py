@@ -26,19 +26,18 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
-
-    def __str__(self):
+	def __str__(self):
 	"""print/str representation of BaseModel instance"""
-        cls_name = type(self).__name__
+	cls_name = type(self).__name__
         str_rep = "[{}] ({}) {}".format(cls_name, self.id, self.__dict__)
         return (str_rep)
 
-    def save(self):
+	def save(self):
         """Updates updated_at with current time"""
         self.updated_at = datetime.now()
         storage.save()
 
-    def to_dict(self):
+	def to_dict(self):
         """returns dictionary key/value list of __dict__"""
         dict_rep = {}
         time_format = datetime.isoformat
