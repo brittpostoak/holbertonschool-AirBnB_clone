@@ -42,10 +42,10 @@ class BaseModel:
 	    """returns dictionary key/value list of __dict__"""
 	    dict_rep = {}
 	    time_format = datetime.isoformat
-        for key in self.__dict__:
-            value = self.__dict__[key]
-            if key == "created_at" or key == "updated_at":
-                dict_rep[key] = str(time_format(value))
+	    for key in self.__dict__:
+		    value = self.__dict__[key]
+                if key == "created_at" or key == "updated_at":
+			dict_rep[key] = str(time_format(value))
             else:
                 dict_rep[key] = value
         dict_rep["__class__"] = type(self).__name__
