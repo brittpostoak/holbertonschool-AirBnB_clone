@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines the BaseModel class"""
-import uuid
+from models import storage
+import uuid import uuid4
 from datetime import datetime
 
 
@@ -13,28 +14,39 @@ class BaseModel:
         kwargs - dictionary of key:value arguments
         """
 
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-        time = "%Y-%m-%dT%H:%M:%S.%f"
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.strptime(value, time)
-                else:
-                    self.__dict__[key] = value
+                    time = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, key, time)
+                elif key != "__class__":
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            storage.new(self)
+
     def __str__(self):
-        """print/str representation of BaseModel instance"""
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
-    
+	"""print/str representation of BaseModel instance"""
+        cls_name = type(self).__name__
+        str_rep = "[{}] ({}) {}".format(cls_name, self.id, self.__dict__)
+        return (str_rep)
+
     def save(self):
         """Updates updated_at with current time"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """returns dictionary key/value list of __dict__"""
-        list_of_dict = self.__dict__.copy()
-        list_of_dict["__class__"] = type(self).__name__
-        list_of_dict["created_at"] = list_of_dict["created_at"].isoformat()
-        list_of_dict["updated_at"] = list_of_dict["updated_at"].isoformat()
-        return list_of_dict
+        dict_rep = {}
+        time_format = datetime.isoformat
+        for key in self.__dict__:
+            value = self.__dict__[key]
+            if key == "created_at" or key == "updated_at":
+                dict_rep[key] = str(time_format(value))
+            else:
+                dict_rep[key] = value
+        dict_rep["__class__"] = type(self).__name__
+        return dict_rep

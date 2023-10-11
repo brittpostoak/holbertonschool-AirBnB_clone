@@ -1,1 +1,15 @@
-i
+#!/usr/bin/python3
+"""
+Class: Amenity
+"""
+
+from models.base_model import BaseModel
+
+
+class Amenity(BaseModel):
+    """ Inherited from BaseModel
+
+    Attributes:
+        name (str): Amenity
+    """
+    name = ""
