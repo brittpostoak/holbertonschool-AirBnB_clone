@@ -26,11 +26,12 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
-	def __str__(self):
-	"""print/str representation of BaseModel instance"""
-	cls_name = type(self).__name__
-        str_rep = "[{}] ({}) {}".format(cls_name, self.id, self.__dict__)
-        return (str_rep)
+		
+    def __str__(self):
+	    """print/str representation of BaseModel instance"""
+	    cls_name = type(self).__name__
+	    str_rep = "[{}] ({}) {}".format(cls_name, self.id, self.__dict__)
+	    return (str_rep)
 
 	def save(self):
         """Updates updated_at with current time"""
