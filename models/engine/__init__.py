@@ -1,3 +1,1 @@
-"""
-file_storage.py
-"""
+#!/usr/bin/python3
