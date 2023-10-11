@@ -24,7 +24,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+            FileStorage.new(self)
 		
     def __str__(self):
 	    """print/str representation of BaseModel instance"""
@@ -35,7 +35,7 @@ class BaseModel:
     def save(self):
 	    """Updates updated_at with current time"""
 	    self.updated_at = datetime.now()
-	    storage.save()
+	    FileStorage.save()
 
     def to_dict(self):
 	    """returns dictionary key/value list of __dict__"""
