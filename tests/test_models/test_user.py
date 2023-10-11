@@ -7,7 +7,6 @@ from models.user import User
 from models.base_model import BaseModel
 from datetime import datetime
 from uuid import UUID
-from models import storage
 
 
 class TestsUser(unittest.TestCase):

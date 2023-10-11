@@ -7,7 +7,6 @@ from models.state import State
 from models.base_model import BaseModel
 from datetime import datetime
 from uuid import UUID
-from models import storage
 
 
 class TestsBaseModel(unittest.TestCase):
