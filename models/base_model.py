@@ -44,7 +44,7 @@ class BaseModel:
 	    time_format = datetime.isoformat
 	    for key in self.__dict__:
 		    value = self.__dict__[key]
-                if key == "created_at" or key == "updated_at":
+		if key == "created_at" or key == "updated_at":
 			dict_rep[key] = str(time_format(value))
             else:
                 dict_rep[key] = value
