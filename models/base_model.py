@@ -48,5 +48,5 @@ class BaseModel:
 			    dict_rep[key] = str(time_format(value))
 		    else:
 			    dict_rep[key] = value
-        dict_rep["__class__"] = type(self).__name__
-        return dict_rep
+			    dict_rep["__class__"] = type(self).__name__
+			    return dict_rep
