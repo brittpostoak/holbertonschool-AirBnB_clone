@@ -24,34 +24,57 @@ class FileStorage:
         """
         All file storage
         """
-        return FileStorage.__objects
+        objects_dictionary = self.__objects.copy()
+        return objects_dictionary
 
     def new(self, obj):
         """
         New file storage
         """
-        FileStorage.__objects[obj.__class__.__name__ + "." + obj.id] = obj
+        class_dictionary = obj.to_dict()
+        class_name = class_dictionary.get('__class__')
+        key = f"{class_name}.{obj.id}"
+        self.__objects.update([(key, obj)])
 
     def save(self):
         """
         Save file storage
         """
-        first_dict = {}
-        for key, val in FileStorage.__objects.items():
-            if val:
-                first_dict[key] = val.to_dict()
-        with open(FileStorage.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(first_dict, f)
+        new_dictionary = {}
+        for key in self.__objects:
+            python_obj = self.__objects.get(key)
+            new_dictionary[key] = python_obj.to_dict()
+        with open(self.__file_path, "w") as file:
+            json.dump(new_dictionary, file)
 
     def reload(self):
         """
         Reload class
         """
-        my_dict = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                   'State': State, 'City': City, 'Amenity': Amenity,
-                   'Review': Review}
-        if os.path.isfile(FileStorage.__file_path):
-            with open(FileStorage.__file_path, 'r', encoding='utf-8') as q:
-                other_dict = json.loads(q.read())
-                for key, val in other_dict.items():
-                    self.new(my_dict[val['__class__']](**val))
+        classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review
+        }
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, "r", encoding="utf-8") as file:
+                loaded = json.load(file)
+                for key in loaded:
+                    old_value = loaded.get(key)
+                    class_name = old_value.get('__class__')
+                    new_value = classes[class_name](**old_value)
+                    loaded.update([(key, new_value)])
+                self.__objects = loaded
+        else:
+            pass
+
+    def destroy_this(self, key):
+        """ removes a key value pair stored in __objects """
+        if key in self.__objects:
+            self.__objects.pop(key)
+        else:
+            return
